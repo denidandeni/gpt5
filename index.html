@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Token GPT-5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="p-6 flex items-center justify-center min-h-screen">
+    <div class="container bg-white p-8 rounded-none border border-black">
+        <h1 class="text-2xl font-bold mb-2">Kalkulator Biaya Token GPT-5</h1>
+        <p class="text-sm text-gray-600 mb-4">Hitung perkiraan biaya bulanan API GPT-5 Anda.</p>
+        <hr class="border-black">
+
+        <div class="mt-6 mb-2">
+            <p class="text-sm font-bold">Harga per 1 Juta Token (Standar)</p>
+            <p class="text-xs text-gray-600 mt-1">
+                Input: $1.25 | Output: $10.00
+            </p>
+        </div>
+
+        <div class="border border-black rounded-none p-4 mt-4">
+            <div class="mb-4">
+                <label for="monthlyTokens" class="block text-sm font-bold mb-2">Jumlah Token Bulanan (dalam juta)</label>
+                <input type="number" id="monthlyTokens" class="w-full p-2 border border-black rounded-none" placeholder="Contoh: 10" min="0">
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 text-center text-sm font-bold">
+                <div class="border border-black p-4 rounded-none flex-1">
+                    <div>Biaya Input</div>
+                    <div id="costInput" class="text-gray-800 font-normal"></div>
+                </div>
+                <div class="border border-black p-4 rounded-none flex-1">
+                    <div>Biaya Output</div>
+                    <div id="costOutput" class="text-gray-800 font-normal"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 p-6 border border-black rounded-none bg-[#0887A0]">
+            <p class="font-bold text-lg mb-2 text-white">Total Biaya & Perkiraan Penggunaan</p>
+            <div class="flex flex-col gap-4">
+                <div class="p-4 border border-black rounded-none bg-white">
+                    <p class="text-sm text-gray-600">Total (USD)</p>
+                    <p id="totalCostUSD" class="text-xl font-bold mt-1">$0.00</p>
+                </div>
+                <div class="p-4 border border-black rounded-none bg-white">
+                    <p class="text-sm text-gray-600">Total (Rupiah)</p>
+                    <p id="totalCostIDR" class="text-xl font-bold mt-1">Rp0</p>
+                </div>
+                <div class="p-4 border border-black rounded-none bg-white">
+                    <p class="text-sm text-gray-600">Total Percakapan (bulanan)</p>
+                    <p id="totalConversations" class="text-xl font-bold mt-1">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputMonthlyTokens = document.getElementById('monthlyTokens');
+        const costInputEl = document.getElementById('costInput');
+        const costOutputEl = document.getElementById('costOutput');
+        const totalCostUSDEl = document.getElementById('totalCostUSD');
+        const totalCostIDREl = document.getElementById('totalCostIDR');
+        const totalConversationsEl = document.getElementById('totalConversations');
+
+        const exchangeRate = 16000; // Asumsi nilai tukar 1 USD = Rp16.000
+        const baseData = {
+            tokens: 72, // dalam juta
+            conversations: 1221
+        };
+
+        const prices = {
+            input: 1.25,
+            output: 10.00
+        };
+
+        const calculateCost = () => {
+            const monthlyTokens = parseFloat(inputMonthlyTokens.value) || 0;
+
+            const inputTokens = monthlyTokens * 0.97;
+            const outputTokens = monthlyTokens * 0.03;
+
+            const costInput = inputTokens * prices.input;
+            const costOutput = outputTokens * prices.output;
+
+            const totalCostUSD = costInput + costOutput;
+            const totalCostIDR = totalCostUSD * exchangeRate;
+
+            costInputEl.textContent = `$${costInput.toFixed(2)}`;
+            costOutputEl.textContent = `$${costOutput.toFixed(2)}`;
+            
+            // --- Perhitungan Tambahan ---
+            // Menghitung rata-rata token per percakapan dari data acuan
+            const avgTokensPerConversation = baseData.tokens / baseData.conversations;
+
+            // Menghitung total percakapan dari input pengguna
+            const totalConversations = monthlyTokens / avgTokensPerConversation;
+
+            // Memperbarui tampilan
+            totalCostUSDEl.textContent = `$${totalCostUSD.toFixed(2)}`;
+            totalCostIDREl.textContent = `Rp${Math.round(totalCostIDR).toLocaleString('id-ID')}`;
+            totalConversationsEl.textContent = `${Math.round(totalConversations).toLocaleString('id-ID')} percakapan`;
+        };
+
+        inputMonthlyTokens.addEventListener('input', calculateCost);
+
+        // Initial calculation on page load
+        calculateCost();
+    </script>
+</body>
+</html>
