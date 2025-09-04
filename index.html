@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Token GPT-5</title>
+    <title>Perbandingan Model AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
             color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 900px;
         }
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
@@ -23,106 +23,300 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
+        .model-card {
+            background-color: #fff;
+            border: 1px solid black;
+            border-radius: 0;
+            padding: 1.5rem;
+        }
+        .highlight-box {
+            background-color: #0887A0;
+            border: 1px solid black;
+            border-radius: 0;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        @media (min-width: 640px) {
+            .horizontal-layout {
+                flex-direction: row;
+            }
+        }
     </style>
 </head>
 <body class="p-6 flex items-center justify-center min-h-screen">
-    <div class="container bg-white p-8 rounded-none border border-black">
-        <h1 class="text-2xl font-bold mb-2">Kalkulator Biaya Token GPT-5</h1>
-        <p class="text-sm text-gray-600 mb-4">Hitung perkiraan biaya bulanan API GPT-5 Anda.</p>
+    <div class="container bg-white p-8 rounded-none border border-black max-w-[80vw]">
+        <h1 class="text-2xl font-bold mb-2">Kalkulator Biaya & Perbandingan Model AI</h1>
+        <p class="text-sm text-gray-600 mb-4">Pilih dua model untuk membandingkan biaya, perkiraan penggunaan, dan kualitas respons.</p>
         <hr class="border-black">
 
-        <div class="mt-6 mb-2">
-            <p class="text-sm font-bold">Harga per 1 Juta Token (Standar)</p>
-            <p class="text-xs text-gray-600 mt-1">
-                Input: $1.25 | Output: $10.00
-            </p>
-        </div>
-
-        <div class="border border-black rounded-none p-4 mt-4">
+        <div class="border border-black rounded-none p-4 mt-4 mb-4">
             <div class="mb-4">
                 <label for="monthlyTokens" class="block text-sm font-bold mb-2">Jumlah Token Bulanan (dalam juta)</label>
                 <input type="number" id="monthlyTokens" class="w-full p-2 border border-black rounded-none" placeholder="Contoh: 10" min="0">
             </div>
-            
-            <div class="flex flex-col sm:flex-row gap-4 text-center text-sm font-bold">
-                <div class="border border-black p-4 rounded-none flex-1">
-                    <div>Biaya Input</div>
-                    <div id="costInput" class="text-gray-800 font-normal"></div>
+        </div>
+
+        <div id="comparison-section" class="flex flex-col sm:flex-row gap-4 mt-4 opacity-50 pointer-events-none transition-opacity duration-300">
+            <div class="flex-1 model-card">
+                <p class="text-sm font-bold mb-2">Model 1</p>
+                <select id="modelSelect1" class="w-full p-2 border border-black rounded-none bg-white">
+                    <option value="gpt-5" selected>GPT-5 ($1.25 Input | $10.00 Output)</option>
+                    <option value="gpt-4o">GPT-4o ($5.00 Input | $15.00 Output)</option>
+                    <option value="gpt-5-mini">GPT-5-mini ($0.25 Input | $2.00 Output)</option>
+                    <option value="gpt-4o-mini">GPT-4o-mini ($0.15 Input | $0.60 Output)</option>
+                </select>
+                <p id="modelName1" class="font-bold text-lg mt-4 mb-2">GPT-5</p>
+                <p class="text-sm font-bold mb-2">Detail Biaya</p>
+                <div class="flex flex-col gap-4 text-center text-sm font-bold">
+                    <div class="border border-black p-4 rounded-none flex-1">
+                        <div>Biaya Input</div>
+                        <div id="costInput1" class="text-gray-800 font-normal">$0.00</div>
+                    </div>
+                    <div class="border border-black p-4 rounded-none flex-1">
+                        <div>Biaya Output</div>
+                        <div id="costOutput1" class="text-gray-800 font-normal">$0.00</div>
+                    </div>
                 </div>
-                <div class="border border-black p-4 rounded-none flex-1">
-                    <div>Biaya Output</div>
-                    <div id="costOutput" class="text-gray-800 font-normal"></div>
+                <div class="highlight-box">
+                    <p class="font-bold text-white text-base mb-2">Total Biaya & Perkiraan</p>
+                    <div class="flex flex-col gap-2">
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total (USD)</p>
+                            <p id="totalCostUSD1" class="text-xl font-bold mt-1">$0.00</p>
+                        </div>
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total (Rupiah)</p>
+                            <p id="totalCostIDR1" class="text-xl font-bold mt-1">Rp0</p>
+                        </div>
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total Percakapan</p>
+                            <p id="totalConversations1" class="text-xl font-bold mt-1">0</p>
+                        </div>
+                    </div>
                 </div>
+                <p class="text-sm font-bold mt-4">Insight Model</p>
+                <hr class="border-black my-2">
+                <p id="modelInsight1" class="text-sm text-gray-800">Pilih model di atas untuk melihat insight mengenai kualitas respons.</p>
+            </div>
+
+            <div class="flex-1 model-card">
+                <p class="text-sm font-bold mb-2">Model 2</p>
+                <select id="modelSelect2" class="w-full p-2 border border-black rounded-none bg-white">
+                    <option value="gpt-4o" selected>GPT-4o ($5.00 Input | $15.00 Output)</option>
+                    <option value="gpt-5" >GPT-5 ($1.25 Input | $10.00 Output)</option>
+                    <option value="gpt-5-mini">GPT-5-mini ($0.25 Input | $2.00 Output)</option>
+                    <option value="gpt-4o-mini">GPT-4o-mini ($0.15 Input | $0.60 Output)</option>
+                </select>
+                <p id="modelName2" class="font-bold text-lg mt-4 mb-2">GPT-4o</p>
+                <p class="text-sm font-bold mb-2">Detail Biaya</p>
+                <div class="flex flex-col gap-4 text-center text-sm font-bold">
+                    <div class="border border-black p-4 rounded-none flex-1">
+                        <div>Biaya Input</div>
+                        <div id="costInput2" class="text-gray-800 font-normal">$0.00</div>
+                    </div>
+                    <div class="border border-black p-4 rounded-none flex-1">
+                        <div>Biaya Output</div>
+                        <div id="costOutput2" class="text-gray-800 font-normal">$0.00</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p class="font-bold text-white text-base mb-2">Total Biaya & Perkiraan</p>
+                    <div class="flex flex-col gap-2">
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total (USD)</p>
+                            <p id="totalCostUSD2" class="text-xl font-bold mt-1">$0.00</p>
+                        </div>
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total (Rupiah)</p>
+                            <p id="totalCostIDR2" class="text-xl font-bold mt-1">Rp0</p>
+                        </div>
+                        <div class="p-2 border border-black rounded-none bg-white">
+                            <p class="text-xs text-gray-600">Total Percakapan</p>
+                            <p id="totalConversations2" class="text-xl font-bold mt-1">0</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm font-bold mt-4">Insight Model</p>
+                <hr class="border-black my-2">
+                <p id="modelInsight2" class="text-sm text-gray-800">Pilih model di atas untuk melihat insight mengenai kualitas respons.</p>
             </div>
         </div>
 
-        <div class="mt-4 p-6 border border-black rounded-none bg-[#0887A0]">
-            <p class="font-bold text-lg mb-2 text-white">Total Biaya & Perkiraan Penggunaan</p>
-            <div class="flex flex-col gap-4">
-                <div class="p-4 border border-black rounded-none bg-white">
-                    <p class="text-sm text-gray-600">Total (USD)</p>
-                    <p id="totalCostUSD" class="text-xl font-bold mt-1">$0.00</p>
-                </div>
-                <div class="p-4 border border-black rounded-none bg-white">
-                    <p class="text-sm text-gray-600">Total (Rupiah)</p>
-                    <p id="totalCostIDR" class="text-xl font-bold mt-1">Rp0</p>
-                </div>
-                <div class="p-4 border border-black rounded-none bg-white">
-                    <p class="text-sm text-gray-600">Total Percakapan (bulanan)</p>
-                    <p id="totalConversations" class="text-xl font-bold mt-1">0</p>
-                </div>
-            </div>
+        <button onclick="exportToCsv()" class="mt-4 px-4 py-2 border border-black rounded-none bg-black text-white font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.707-9.293a1 1 0 00-1.414 1.414l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414L11 12.586V4a1 1 0 10-2 0v8.586L6.707 7.707z" clip-rule="evenodd" />
+            </svg>
+            Ekspor Data ke CSV
+        </button>
+
+        <div class="mt-4 text-xs text-gray-600">
+            <p><strong>Nilai tukar:</strong> 1 USD = Rp16.433</p>
+            <p>**Catatan:** Perkiraan jumlah percakapan ini didasarkan pada data historis dengan rata-rata 58.74 token per percakapan. Angka ini dapat bervariasi secara signifikan tergantung pada panjang, kompleksitas, dan gaya percakapan yang dihasilkan.</p>
         </div>
     </div>
 
     <script>
         const inputMonthlyTokens = document.getElementById('monthlyTokens');
-        const costInputEl = document.getElementById('costInput');
-        const costOutputEl = document.getElementById('costOutput');
-        const totalCostUSDEl = document.getElementById('totalCostUSD');
-        const totalCostIDREl = document.getElementById('totalCostIDR');
-        const totalConversationsEl = document.getElementById('totalConversations');
+        const comparisonSection = document.getElementById('comparison-section');
+        
+        const modelSelect1 = document.getElementById('modelSelect1');
+        const modelSelect2 = document.getElementById('modelSelect2');
+        const modelName1El = document.getElementById('modelName1');
+        const costInput1El = document.getElementById('costInput1');
+        const costOutput1El = document.getElementById('costOutput1');
+        const totalCostUSD1El = document.getElementById('totalCostUSD1');
+        const totalCostIDR1El = document.getElementById('totalCostIDR1');
+        const totalConversations1El = document.getElementById('totalConversations1');
+        const modelInsight1El = document.getElementById('modelInsight1');
+        
+        const modelName2El = document.getElementById('modelName2');
+        const costInput2El = document.getElementById('costInput2');
+        const costOutput2El = document.getElementById('costOutput2');
+        const totalCostUSD2El = document.getElementById('totalCostUSD2');
+        const totalCostIDR2El = document.getElementById('totalCostIDR2');
+        const totalConversations2El = document.getElementById('totalConversations2');
+        const modelInsight2El = document.getElementById('modelInsight2');
 
-        const exchangeRate = 16000; // Asumsi nilai tukar 1 USD = Rp16.000
+        const exchangeRate = 16433; // Updated exchange rate
         const baseData = {
-            tokens: 72, // dalam juta
-            conversations: 1221
+            tokens: 72.322794,
+            conversations: 1255
         };
 
         const prices = {
-            input: 1.25,
-            output: 10.00
+            'gpt-5': { input: 1.25, output: 10.00 },
+            'gpt-4o': { input: 5.00, output: 15.00 },
+            'gpt-5-mini': { input: 0.25, output: 2.00 },
+            'gpt-4o-mini': { input: 0.15, output: 0.60 }
         };
 
+        const insights = {
+            'gpt-5': 'GPT-5 memberikan respons yang paling akurat dan detail, ideal untuk tugas yang membutuhkan kualitas tinggi dan pemahaman mendalam. Model ini unggul dalam pemecahan masalah teknis, matematika, dan penalaran.',
+            'gpt-4o': 'GPT-4o dikenal dengan responsnya yang lebih personal dan empatik, cocok untuk interaksi yang membutuhkan nada yang lebih manusiawi, seperti dalam kasus komplain. Kecepatannya juga menjadi keunggulan utama.',
+            'gpt-5-mini': 'GPT-5-mini menawarkan keseimbangan antara biaya dan performa. Responsnya lebih ringkas namun tetap akurat untuk tugas umum.',
+            'gpt-4o-mini': 'GPT-4o-mini adalah pilihan paling hemat biaya. Responsnya sangat ringkas dan langsung ke inti, ideal untuk aplikasi yang mengutamakan kecepatan dan efisiensi.'
+        };
+        
         const calculateCost = () => {
             const monthlyTokens = parseFloat(inputMonthlyTokens.value) || 0;
-
-            const inputTokens = monthlyTokens * 0.97;
-            const outputTokens = monthlyTokens * 0.03;
-
-            const costInput = inputTokens * prices.input;
-            const costOutput = outputTokens * prices.output;
-
-            const totalCostUSD = costInput + costOutput;
-            const totalCostIDR = totalCostUSD * exchangeRate;
-
-            costInputEl.textContent = `$${costInput.toFixed(2)}`;
-            costOutputEl.textContent = `$${costOutput.toFixed(2)}`;
             
-            // --- Perhitungan Tambahan ---
-            // Menghitung rata-rata token per percakapan dari data acuan
-            const avgTokensPerConversation = baseData.tokens / baseData.conversations;
+            if (monthlyTokens > 0) {
+                comparisonSection.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                comparisonSection.classList.add('opacity-50', 'pointer-events-none');
+                totalCostUSD1El.textContent = `$0.00`;
+                totalCostIDR1El.textContent = `Rp0`;
+                totalConversations1El.textContent = `0`;
+                totalCostUSD2El.textContent = `$0.00`;
+                totalCostIDR2El.textContent = `Rp0`;
+                totalConversations2El.textContent = `0`;
+                costInput1El.textContent = `$0.00`;
+                costOutput1El.textContent = `$0.00`;
+                costInput2El.textContent = `$0.00`;
+                costOutput2El.textContent = `$0.00`;
+            }
 
-            // Menghitung total percakapan dari input pengguna
+            const selectedModel1 = modelSelect1.value;
+            const modelPrices1 = prices[selectedModel1];
+            const inputTokens1 = monthlyTokens * 0.97;
+            const outputTokens1 = monthlyTokens * 0.03;
+            const costInput1 = inputTokens1 * modelPrices1.input;
+            const costOutput1 = outputTokens1 * modelPrices1.output;
+            const totalCostUSD1 = costInput1 + costOutput1;
+            const totalCostIDR1 = totalCostUSD1 * exchangeRate;
+            const avgTokensPerConversation = baseData.tokens / baseData.conversations;
             const totalConversations = monthlyTokens / avgTokensPerConversation;
 
-            // Memperbarui tampilan
-            totalCostUSDEl.textContent = `$${totalCostUSD.toFixed(2)}`;
-            totalCostIDREl.textContent = `Rp${Math.round(totalCostIDR).toLocaleString('id-ID')}`;
-            totalConversationsEl.textContent = `${Math.round(totalConversations).toLocaleString('id-ID')} percakapan`;
+            modelName1El.textContent = selectedModel1.toUpperCase();
+            costInput1El.textContent = `$${costInput1.toFixed(2)}`;
+            costOutput1El.textContent = `$${costOutput1.toFixed(2)}`;
+            totalCostUSD1El.textContent = `$${totalCostUSD1.toFixed(2)}`;
+            totalCostIDR1El.textContent = `Rp${Math.round(totalCostIDR1).toLocaleString('id-ID')}`;
+            totalConversations1El.textContent = `${Math.round(totalConversations).toLocaleString('id-ID')} percakapan`;
+            
+            // Update the insight text for Model 1
+            let model1InsightText;
+            if (selectedModel1 === 'gpt-5') {
+                model1InsightText = "GPT-5 adalah model yang sangat akurat dan unggul dalam tugas teknis seperti coding dan matematika. Kemampuannya dalam penalaran dan mengurangi kesalahan (halusinasi) membuatnya sangat dapat diandalkan untuk tugas yang memerlukan presisi tinggi.";
+            } else if (selectedModel1 === 'gpt-4o') {
+                model1InsightText = "GPT-4o dikenal dengan kecepatan dan responsnya yang lebih personal. Ini sangat baik untuk percakapan yang terasa alami dan interaktif. Cocok untuk chatbot yang membutuhkan respons cepat dan bersifat lebih manusiawi.";
+            } else if (selectedModel1 === 'gpt-5-mini') {
+                model1InsightText = "GPT-5-mini menawarkan keseimbangan yang baik antara biaya dan performa. Responsnya ringkas namun akurat, menjadikannya pilihan efisien untuk tugas-tugas umum.";
+            } else if (selectedModel1 === 'gpt-4o-mini') {
+                model1InsightText = "GPT-4o-mini adalah model paling hemat biaya. Responsnya sangat ringkas dan efisien, ideal untuk aplikasi yang mengutamakan kecepatan dan penghematan biaya.";
+            }
+            modelInsight1El.textContent = model1InsightText;
+
+            const selectedModel2 = modelSelect2.value;
+            const modelPrices2 = prices[selectedModel2];
+            const inputTokens2 = monthlyTokens * 0.97;
+            const outputTokens2 = monthlyTokens * 0.03;
+            const costInput2 = inputTokens2 * modelPrices2.input;
+            const costOutput2 = outputTokens2 * modelPrices2.output;
+            const totalCostUSD2 = costInput2 + costOutput2;
+            const totalCostIDR2 = totalCostUSD2 * exchangeRate;
+            
+            modelName2El.textContent = selectedModel2.toUpperCase();
+            costInput2El.textContent = `$${costInput2.toFixed(2)}`;
+            costOutput2El.textContent = `$${costOutput2.toFixed(2)}`;
+            totalCostUSD2El.textContent = `$${totalCostUSD2.toFixed(2)}`;
+            totalCostIDR2El.textContent = `Rp${Math.round(totalCostIDR2).toLocaleString('id-ID')}`;
+            totalConversations2El.textContent = `${Math.round(totalConversations).toLocaleString('id-ID')} percakapan`;
+
+            // Update the insight text for Model 2
+            let model2InsightText;
+            if (selectedModel2 === 'gpt-5') {
+                model2InsightText = "GPT-5 adalah model yang sangat akurat dan unggul dalam tugas teknis seperti coding dan matematika. Kemampuannya dalam penalaran dan mengurangi kesalahan (halusinasi) membuatnya sangat dapat diandalkan untuk tugas yang memerlukan presisi tinggi.";
+            } else if (selectedModel2 === 'gpt-4o') {
+                model2InsightText = "GPT-4o dikenal dengan kecepatan dan responsnya yang lebih personal. Ini sangat baik untuk percakapan yang terasa alami dan interaktif. Cocok untuk chatbot yang membutuhkan respons cepat dan bersifat lebih manusiawi.";
+            } else if (selectedModel2 === 'gpt-5-mini') {
+                model2InsightText = "GPT-5-mini menawarkan keseimbangan yang baik antara biaya dan performa. Responsnya ringkas namun akurat, menjadikannya pilihan efisien untuk tugas-tugas umum.";
+            } else if (selectedModel2 === 'gpt-4o-mini') {
+                model2InsightText = "GPT-4o-mini adalah model paling hemat biaya. Responsnya sangat ringkas dan efisien, ideal untuk aplikasi yang mengutamakan kecepatan dan penghematan biaya.";
+            }
+            modelInsight2El.textContent = model2InsightText;
         };
 
+        const exportToCsv = () => {
+            const monthlyTokens = parseFloat(inputMonthlyTokens.value) || 0;
+            if (monthlyTokens === 0) {
+                alert('Silakan masukkan jumlah token bulanan terlebih dahulu.');
+                return;
+            }
+
+            const model1 = modelSelect1.value;
+            const model2 = modelSelect2.value;
+            const totalCostUSD1 = totalCostUSD1El.textContent;
+            const totalCostIDR1 = totalCostIDR1El.textContent;
+            const totalConversations1 = totalConversations1El.textContent;
+            const totalCostUSD2 = totalCostUSD2El.textContent;
+            const totalCostIDR2 = totalCostIDR2El.textContent;
+            const totalConversations2 = totalConversations2El.textContent;
+            const insight1 = modelInsight1El.textContent;
+            const insight2 = modelInsight2El.textContent;
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Metrik,Model 1,Model 2\r\n";
+            csvContent += `Model,${model1.toUpperCase()},${model2.toUpperCase()}\r\n`;
+            csvContent += `Jumlah Token Bulanan (juta),${monthlyTokens},${monthlyTokens}\r\n`;
+            csvContent += `Total Biaya (USD),${totalCostUSD1},${totalCostUSD2}\r\n`;
+            csvContent += `Total Biaya (Rupiah),${totalCostIDR1},${totalCostIDR2}\r\n`;
+            csvContent += `Perkiraan Percakapan,${totalConversations1},${totalConversations2}\r\n`;
+            csvContent += `Nilai Tukar USD,Rp${exchangeRate},Rp${exchangeRate}\r\n`;
+            csvContent += `Insight,"${insight1}","${insight2}"\r\n`;
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "perbandingan_model_ai.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        
         inputMonthlyTokens.addEventListener('input', calculateCost);
+        modelSelect1.addEventListener('change', calculateCost);
+        modelSelect2.addEventListener('change', calculateCost);
 
         // Initial calculation on page load
         calculateCost();
